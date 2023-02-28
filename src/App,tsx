@@ -1,0 +1,28 @@
+import { useEffect, useState } from "react";
+import "./App.css";
+
+function App() {
+  const [frase, setFrase] = useState(``);
+  const [autor, setAutor] = useState(``);
+
+  useEffect(() => {
+    fetch("https://stoicquotesapi.com/v1/api/quotes/random")
+      .then((response) => {
+        return response.json();
+      })
+      .then((quote) => {
+        setFrase(quote.body);
+        setAutor(quote.author);
+      });
+  }, []);
+
+  return (
+    <main className="App">
+      <section>
+        <h1 className="loading">{frase}</h1>
+        <em>{autor}</em>
+      </section>
+    </main>
+  );
+}
+export default App
