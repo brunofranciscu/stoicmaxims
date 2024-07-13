@@ -55,9 +55,8 @@ The Author component displays quotes from a specific author. It uses the followi
 To run the project locally:
 
 Clone the repository.
-Install dependencies with npm install.
-Start the application with npm start.
-This README.md provides an overview of the project in English, including its features, project structure, how it works, JSON structure, main components, and instructions on how to run the project locally.
+ **Install dependencies with npm install.**
+ **Start the application with npm start.**
 
 
 
