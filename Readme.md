@@ -1,57 +1,65 @@
-# Máximas Estóicas
+# Stoic Maxims
 
-## Este é um aplicativo React simples que exibe frases de autores, com funcionalidades de paginação e compartilhamento. O aplicativo permite visualizar frases por autor e compartilhar cada frase em várias plataformas de mídia social.
+## This is a simple React application that displays quotes from authors, with pagination and sharing features. The app allows you to view quotes by author and share each quote on various social media platforms.
 
-### Funcionalidades
- - Exibição de Frases: Exibe frases retiradas de um arquivo JSON.
- - Paginação: Permite navegação entre diferentes páginas de frases.
- - Compartilhamento: Cada frase pode ser compartilhada em várias plataformas de mídia social, incluindo Facebook, Twitter, WhatsApp, Telegram, LinkedIn e Reddit.
- - Página do Autor: Exibe todas as frases de um autor específico.
- - 
-### Estrutura do Projeto
- * src/assets/frases.json: Arquivo JSON contendo as frases.
- * src/components/Author.js: Componente que exibe as frases de um autor específico com funcionalidades de paginação e compartilhamento.
- * src/components/Pagination.js: Componente de paginação para navegar entre as páginas de frases.
- * 
-### Como Funciona
- - Carregamento de Dados: As frases são carregadas a partir de um arquivo JSON localizado em src/assets/frases.json.
- - Filtragem por Autor: As frases são filtradas pelo autor com base no parâmetro de URL.
- - Paginação: As frases são paginadas, mostrando um número específico de frases por página.
- - Compartilhamento: Cada frase tem botões de compartilhamento que permitem aos usuários compartilhar a frase em várias plataformas de mídia social.
- - Página do Autor: O aplicativo possui uma página dedicada para cada autor, onde todas as frases desse autor são exibidas.
-Estrutura do JSON
-O arquivo JSON frases.json deve ter a seguinte estrutura:
+### Features
+- **Quote Display**: Displays quotes from a JSON file.
+- **Pagination**: Allows navigation between different pages of quotes.
+- **Sharing**: Each quote can be shared on various social media platforms, including Facebook, Twitter, WhatsApp, Telegram, LinkedIn, and Reddit.
+- **Author Page**: Displays all quotes from a specific author.
+
+### Project Structure
+- **src/assets/frases.json**: JSON file containing the quotes.
+- **src/components/Author.js**: Component that displays quotes from a specific author with pagination and sharing features.
+- **src/components/Pagination.js**: Pagination component to navigate between pages of quotes.
+
+### How It Works
+- **Data Loading**: Quotes are loaded from a JSON file located at src/assets/frases.json.
+- **Filtering by Author**: Quotes are filtered by author based on the URL parameter.
+- **Pagination**: Quotes are paginated, showing a specific number of quotes per page.
+- **Sharing**: Each quote has share buttons that allow users to share the quote on various social media platforms.
+- **Author Page**: The app has a dedicated page for each author, displaying all quotes from that author.
+
+### JSON Structure
+The frases.json file should have the following structure:
 
 ```json
 [
   {
     "id": 1,
-    "author": "Autor 1",
-    "text": "Frase 1 do Autor 1"
+    "author": "Author 1",
+    "text": "Quote 1 from Author 1"
   },
   {
     "id": 2,
-    "author": "Autor 2",
-    "text": "Frase 1 do Autor 2"
-  },
+    "author": "Author 2",
+    "text": "Quote 1 from Author 2"
+  }
 ]
 ```
-## Componentes Principais
-### Author.jsx
-O componente Author exibe as frases de um autor específico. Ele utiliza os seguintes hooks e funcionalidades:
 
- - useParams: Para obter o autor da URL.
- - useState: Para gerenciar o estado das frases e da página atual.
- - useEffect: Para carregar e filtrar as frases pelo autor.
- - Pagination: Componente de paginação para navegar entre as páginas de frases.
- - react-share: Biblioteca usada para os botões de compartilhamento.
+### Main Components
+**Author.jsx**
+The Author component displays quotes from a specific author. It uses the following hooks and features:
 
-### Pagination.jsx
-O componente Pagination permite a navegação entre diferentes páginas de frases. Ele calcula o número total de páginas com base no número total de frases e no número de frases por página.
+- **useParams:** To get the author from the URL.
+- **useState:** To manage the state of quotes and the current page.
+- **useEffect:** To load and filter quotes by author.
+- **Pagination:** Pagination component to navigate between pages of quotes.
+- **react-share:** Library used for the share buttons.
 
-### Como Executar
-Para executar o projeto localmente:
+  **Pagination.jsx**
+  The Pagination component allows navigation between different pages of quotes. It calculates the total number of pages based on the total number of quotes and the number of quotes per page.
 
-Clone o repositório.
-Instale as dependências com npm install.
-Inicie o aplicativo com npm start.
+### How to Run
+To run the project locally:
+
+Clone the repository.
+Install dependencies with npm install.
+Start the application with npm start.
+This README.md provides an overview of the project in English, including its features, project structure, how it works, JSON structure, main components, and instructions on how to run the project locally.
+
+
+
+
+
