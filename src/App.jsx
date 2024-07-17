@@ -1,16 +1,57 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, TelegramShareButton, LinkedinShareButton, RedditShareButton, FacebookIcon, TwitterIcon, WhatsappIcon, TelegramIcon, LinkedinIcon, RedditIcon, } from 'react-share';
 import { Link } from 'react-router-dom';
+import TextoAudio from './components/TextoAudio.jsx';
+import AudioWaves from './components/AudioWaves.jsx';
 
 export default function App() {
   const [frases, setFrases] = useState([]);
   const [fraseAtual, setFraseAtual] = useState({ text: '', author: '', id:'' });
   const [show, setShow] = useState(false)
+  const [blob, setBlob] = useState(null)
+  const [textou, setTextou] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef(null);
+  const [isEnded, setIsEnded] = useState(false);
+  const [playPause, setPlayPause] = useState(true);
+  const api1 = 'f7333e903edf9a082fef5585c547e03b';
+  const itemsMenu = new Set();
   
-  const itemsMenu = new Set()
+  
+
+  const progress = async () => {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB`, settings);
+    const result = await response.blob();
+    setBlob(URL.createObjectURL(result));
+    setIsEnded(false)
+  };
+
+  const settings = {
+    method: 'POST',
+    headers: { "Accept": "audio/mpeg", "Content-Type": "application/json", "xi-api-key": api1 },
+    body: JSON.stringify({
+      "text": fraseAtual.text,
+      "model_id": "eleven_multilingual_v1",
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.5
+      }
+    })
+  };
+
+  const tocar = () => {
+    if (!textou) {
+      setTextou(true);
+      setTimeout(()=>{document.querySelector('audio').play()},300)      
+    } else {
+      document.querySelector('audio').play();
+    }
+  };
+
+  const pausar = () => document.querySelector('audio').pause()
+
   frases.forEach(item => itemsMenu.add(item.author))
   const menu = Array.from(itemsMenu);
-  
   useEffect(() => {
     const carregarFrases = async () => {
       const data = await fetch('./quotes.json');
@@ -66,9 +107,12 @@ export default function App() {
                       {allButtons}
                   </div>  
                 </div>
+                <div className='md:-translate-y-8 translate-y-12 mx-auto'>
+                  <TextoAudio setBlob={setBlob} tocar={tocar} pausar={pausar} progress={progress} blob={blob} isEnded={isEnded} setPlayPause={setPlayPause} playPause={playPause}/>
+                </div>                
               </div>
           )}
-              <div className="absolute bottom-2 grid place-items-center w-full">
+              <div className="absolute top-2 grid place-items-center w-full">
                 <nav>
                   <ul className='flex gap-10'> 
                     {menu.map((item,index) => 
@@ -79,13 +123,15 @@ export default function App() {
                   </ul>
                   <small className='absolute right-5 bottom-0 text-xs hidden sm:block'>
                     {show && 
-                        <div className='absolute right-0 bottom-4 shadow bg-gray-100 rounded-lg px-5 py-2'>
+                        <div className='absolute right-0 top-5 shadow bg-gray-100 rounded-lg px-5 py-2'>
                           send the author and the maxim to the w-mail: <a href='mailto:bruno.f.c@icloud.com'>bruno.f.c@icloud.com</a>
                         </div>}
                     <button onClick={()=> setShow(show ? false : true)}>Know more stoic authors?</button>
                   </small>
                 </nav>
               </div>
+
+              <AudioWaves blob={blob} duration={duration} setDuration={setDuration} audioRef={audioRef} setIsEnded={setIsEnded} setPlayPause={setPlayPause}/>
         </div>
     );
 }
