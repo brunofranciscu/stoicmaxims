@@ -9,7 +9,7 @@ export default function Quotes(){
   const quote = quotes.quotes.find(q => q.id === parseInt(id));
   const navigate = useNavigate()
   const [blob, setBlob] = useState(null)
-  const api1 = '2167e436442c988625c4a5cd6548befc';
+  const api1 = 'f7333e903edf9a082fef5585c547e03b';
   const [isEnded, setIsEnded] = useState(false);
   const [playPause, setPlayPause] = useState(true);
   const [textou, setTextou] = useState(false)
