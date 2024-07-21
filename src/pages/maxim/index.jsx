@@ -3,6 +3,7 @@ import quotes from '../../assets/quotes.json'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import TextoAudio from '../../components/TextoAudio'
 import AudioSpectrum from 'react-audio-spectrum';
+import { Helmet } from 'react-helmet-async';
 
 export default function Maxim(){
   const { id } = useParams();
@@ -24,7 +25,7 @@ export default function Maxim(){
   if (!quote ) {
     return (
            <div className='h-[100dvh] w-full relative grid place-content-center bg-gray-200 dark:bg-gray-800 px-5'>
-             <button onClick={() => navigate('/')} className='dark:text-gray-400 text-gray-900 font-["Poppins"] font-[300] hover:text-gray-400 duration-100 absolute bottom-2 left-3'>
+             <button onClick={() => navigate(-1)} className='dark:text-gray-400 text-gray-900 font-["Poppins"] font-[300] hover:text-gray-400 duration-100 absolute bottom-2 left-3'>
                 <span className='relative top-[1px]'>&lt;</span> back
               </button>
               
@@ -73,7 +74,7 @@ export default function Maxim(){
         }
       })
     };
-    const shareUrl = window.location.origin.toString();
+    const url = window.location.origin.toString();
 
     useEffect(() => {
         const salvadas = JSON.parse(localStorage.getItem('salvas')) || {};
@@ -90,11 +91,18 @@ export default function Maxim(){
 
     return (
       <div className='h-[100dvh] w-full relative grid place-content-center bg-gray-200 dark:bg-gray-800 px-5'>
+        <Helmet>
+          <title>Stoic Maxims</title>
+          <meta property="og:title" content={quote.author}/>
+          <meta property="og:description" content={`Know more quotes from ${quote.author}.`} />
+          <meta property="og:image" content="./og.jpg" />
+          <meta property="og:url" content={`https://stoicmaxim.vercel.app/${quote.author}`} />
+        </Helmet>
 
-        <button dangerouslySetInnerHTML={{__html:savedIcon}} title="ver salvos" style={{left:viewSaved ? window.innerWidth < 770 ? '90%' :'410px' : '20px'}}
-                className='stroke-gray-500 hover:brightness-150 fill-gray-500 duration-75 absolute top-5 left-5 z-[999999]' 
-                onClick={()=> setViewSaved(prevViewSaved => !prevViewSaved)}>
-        </button>
+              <button dangerouslySetInnerHTML={{__html:savedIcon}} title="see saved" style={{left:viewSaved ? window.innerWidth < 770 ? '90%' :'410px' : '20px'}} key={'button'}
+                      className='stroke-gray-500 hover:brightness-150 fill-gray-500 duration-75 absolute top-5 left-5 z-[999999] text-gray-600 dark:text-gray-200' 
+                      onClick={()=> setViewSaved(prevViewSaved => !prevViewSaved)}>
+              </button>
 
           {viewSaved &&
             <ul className='fixed left-0 md:w-[450px] w-full bg-gray-200 dark:bg-gray-800/95 shadow-2xl h-full z-[999998] p-12 overflow-y-auto flex flex-col gap-8 salvos backdrop-blur-sm top-0'>
@@ -109,7 +117,7 @@ export default function Maxim(){
                       </button>
                       <div className='flex flex-col'>
                         <small className='text-[.6rem] block leading-none text-gray-400/50'> - {frase.author}</small>
-                        <span onClick={() => navigate('/maxim/' + key)}>"{frase.text}"</span>
+                        <span onClick={() => navigate(`/author/${frase.author.replace(' ','-').toLowerCase()}/maxim/${key}`)}>"{frase.text}"</span>
                       </div>
                     </li>)
                   ))
@@ -120,15 +128,15 @@ export default function Maxim(){
         <h1 className='font-["Poppins"] font-[500] sm:text-4xl text-2xl leading-10 max-w-[1300px] text-center text-balance text-gray-600 dark:text-gray-300'>"{quote.text}"</h1>
         
         <div className="flex py-5 justify-between flex-col md:flex-row items-center gap-5">
-          <h2 className='text-sm font-["Poppins"] sm:w-[200px] w-full text-center leading-none self-center text-gray-600 dark:text-gray-400 hover:font-bold duration-100' title={`ver todas as maximas do ${quote.author}`}>
-            <Link to={`${shareUrl}/author/${quote.author}`}>- {quote.author}</Link>
+          <h2 className='text-sm font-["Poppins"] sm:w-[200px] w-full text-center leading-none self-center text-gray-600 dark:text-gray-400 hover:font-bold duration-100' title={`see all quotes from ${quote.author}`}>
+            <Link to={`${url}/author/${quote.author.split(' ').join('-')}`}>- {quote.author}</Link>
           </h2>
           <TextoAudio  setBlob={setBlob} tocar={tocar} pausar={pausar} progress={progress} blob={blob} isEnded={isEnded} setPlayPause={setPlayPause} playPause={playPause} />
           {!salvas[quote.id] && <button dangerouslySetInnerHTML={{__html:saveIcon}} title="salvar máxima" className='stroke-gray-500 hover:fill-gray-500 fill-none duration-100' onClick={()=> salvar(quote.id)}></button>}
           {salvas[quote.id] && <button dangerouslySetInnerHTML={{__html:savedIcon}} title="remover dos salvos" className='stroke-gray-500 hover:fill-gray-500 fill-gray-500 duration-100' onClick={()=> salvar(quote.id)}></button>}
         </div>
   
-        <button onClick={() => navigate('/')} className='dark:text-gray-400 text-gray-900 font-["Poppins"] font-[300] hover:text-gray-400 duration-100 absolute bottom-2 left-3'>
+        <button onClick={() => navigate(-1)} className='dark:text-gray-400 text-gray-900 font-["Poppins"] font-[300] hover:text-gray-400 duration-100 absolute bottom-2 left-3'>
           <span className='relative top-[1px]'>&lt;</span> back
         </button>
   

@@ -5,7 +5,7 @@ export default function About(){
     return (
         <>
             <header className="max-w-[1000px] mx-auto px-12 [&>h1]:font-[900] [&>h1]:uppercase [&>h1]:text-2xl relative text-gray-700 dark:text-gray-200 pt-28">
-                <button className="absolute left-12 top-12" onClick={()=> navigate('/')}>
+                <button className="absolute left-12 top-12" onClick={()=> navigate(-1)}>
                     <span className='relative top-[1px]'>&lt;</span> back
                 </button>
                 <h1 className="font-bold">The Project</h1> <br />
@@ -44,7 +44,7 @@ export default function About(){
                            We invite readers and philosophy enthusiasts to contribute to this project. <br />
                            If you know other maxims or Stoic authors that should be included, please contact us at: &nbsp;
                            <a href="mailto:bruno.f.c@icloud.com"><span className="dark:text-white text-black underline inline-block">bruno.f.c@icloud.com</span></a>, 
-                           or contribute via &nbsp;<Link to={'https://github.com/brunofranciscu/maximasestoicas'}><span className="dark:text-white text-black underline">GitHub</span></Link>.
+                           or contribute via &nbsp;<Link to={'https://github.com/brunofranciscu/stoicmaxims'}><span className="dark:text-white text-black underline">GitHub</span></Link>.
                            I believe that wisdom grows when shared, and I look forward to expanding the collection with your help.
                     
                         </p>
@@ -63,7 +63,7 @@ export default function About(){
                         <h3 className="font-bold">Networks</h3>
                         <p>
                             Follow us on Instagram for updates, new maxims, and daily inspirations. Visit our profile &nbsp;
-                                <Link to="https://www.instagram.com/maximasestoicas">
+                                <Link to="https://www.instagram.com/stoicmaxims">
                                     <span className="underline dark:text-white text-black">here</span>
                                 </Link>
                         .</p>

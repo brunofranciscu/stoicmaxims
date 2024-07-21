@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import quotes from '../../assets/quotes.json';
-import Pagination from '../../Pagination';
+import Pagination from '../../components/Pagination';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, TelegramShareButton, LinkedinShareButton, RedditShareButton, FacebookIcon, TwitterIcon, WhatsappIcon, TelegramIcon, LinkedinIcon, RedditIcon, } from 'react-share';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const Author = () => {
   const { author } = useParams();
@@ -18,7 +19,7 @@ const Author = () => {
   const remover = `<svg fill="#000000" width="15px" height="15px" viewBox="0 0 408.483 408.483"> <g> <g> <path d="M87.748,388.784c0.461,11.01,9.521,19.699,20.539,19.699h191.911c11.018,0,20.078-8.689,20.539-19.699l13.705-289.316 H74.043L87.748,388.784z M247.655,171.329c0-4.61,3.738-8.349,8.35-8.349h13.355c4.609,0,8.35,3.738,8.35,8.349v165.293 c0,4.611-3.738,8.349-8.35,8.349h-13.355c-4.61,0-8.35-3.736-8.35-8.349V171.329z M189.216,171.329 c0-4.61,3.738-8.349,8.349-8.349h13.355c4.609,0,8.349,3.738,8.349,8.349v165.293c0,4.611-3.737,8.349-8.349,8.349h-13.355 c-4.61,0-8.349-3.736-8.349-8.349V171.329L189.216,171.329z M130.775,171.329c0-4.61,3.738-8.349,8.349-8.349h13.356 c4.61,0,8.349,3.738,8.349,8.349v165.293c0,4.611-3.738,8.349-8.349,8.349h-13.356c-4.61,0-8.349-3.736-8.349-8.349V171.329z"/> <path d="M343.567,21.043h-88.535V4.305c0-2.377-1.927-4.305-4.305-4.305h-92.971c-2.377,0-4.304,1.928-4.304,4.305v16.737H64.916 c-7.125,0-12.9,5.776-12.9,12.901V74.47h304.451V33.944C356.467,26.819,350.692,21.043,343.567,21.043z"/> </g> </g> </svg>`
 
   useEffect(() => {
-    const filtered = quotes.quotes.filter(quote => quote.author === author);
+    const filtered = quotes.quotes.filter(quote => quote.author.split(' ').join('-') === author);
     setFilteredQuotes(filtered);
   }, [author]);
 
@@ -26,7 +27,7 @@ const Author = () => {
   const firstQuoteIndex = lastQuoteIndex - quotesPerPage;
   const currentQuotes = filteredQuotes.slice(firstQuoteIndex, lastQuoteIndex);
 
-  const shareUrl = window.location.origin.toString()
+  const url = window.location.origin.toString()
 
   useEffect(() => {
       const salvadas = JSON.parse(localStorage.getItem('salvas')) || {};
@@ -43,22 +44,29 @@ const Author = () => {
 
   return (
     <div className='w-full relative grid place-content-center bg-gray-200 dark:bg-gray-800 py-20' style={{height:filteredQuotes.length < quotesPerPage ? '100dvh' : '100%'}}>
+        <Helmet>
+          <title>Stoic Maxims</title>
+          <meta property="og:title" content={author}/>
+          <meta property="og:description" content={`Know more quotes from ${author}.`} />
+          <meta property="og:image" content="./og.jpg" />
+          <meta property="og:url" content={`https://stoicmaxim.vercel.app/${author}`} />
+        </Helmet>
 
-        <button dangerouslySetInnerHTML={{__html:savedIcon}} title="ver salvos" style={{right:viewSaved ? window.innerWidth < 770 ? '90%' :'410px' : '20px'}} key={'button'}
-                className='stroke-gray-500 hover:brightness-150 fill-gray-500 duration-75 absolute top-5 right-5 z-[999999]' 
+        <button dangerouslySetInnerHTML={{__html:savedIcon}} title="see saved" style={{right:viewSaved ? window.innerWidth < 770 ? '90%' :'410px' : '20px'}} key={'button'}
+                className='stroke-gray-500 hover:brightness-150 fill-gray-500 duration-75 absolute top-5 right-5 z-[999999] text-gray-600 dark:text-gray-200' 
                 onClick={()=> setViewSaved(prevViewSaved => !prevViewSaved)}>
         </button>
 
       <div className='flex flex-col max-w-[1200px] w-full px-16 mx-auto gap-5 '>
 
         <div className='flex justify-between'>
-          <button onClick={() => navigate('/')} className='dark:text-gray-400 text-gray-900 font-["Poppins"] font-[300] hover:text-gray-400 duration-100'><span className='relative top-[1px]'>&lt;</span> back</button>
-          <h1 className='dark:text-gray-200 text-gray-600 sm:text-4xl text-xl font-["Poppins"] font-[500]'>{author}</h1>
+          <button onClick={() => navigate(-1)} className='dark:text-gray-400 text-gray-900 font-["Poppins"] font-[300] hover:text-gray-400 duration-100'><span className='relative top-[1px]'>&lt;</span> back</button>
+          <h1 className='dark:text-gray-200 text-gray-600 sm:text-4xl text-xl font-["Poppins"] font-[500]'>{author.split('-').join(' ')}</h1>
         </div>
 
         {viewSaved &&
               <ul className='fixed right-0 md:w-[450px] w-full bg-gray-200 dark:bg-gray-800/95 shadow-2xl h-full z-[999998] p-12 overflow-y-auto flex flex-col gap-8 salvos backdrop-blur-sm top-0'>
-                {Object.keys(salvas).filter(key => salvas[key]).length < 1 && <span className='text-gray-700 dark:text-gray-300'>Nada encontrado.</span>}
+                {Object.keys(salvas).filter(key => salvas[key]).length < 1 && <span className='text-gray-700 dark:text-gray-300'>Nothing found.</span>}
                 {
                   Object.entries(salvas).filter(([key, value]) => value).map(([key]) => (
                     quotes.quotes.map(frase => (
@@ -69,7 +77,7 @@ const Author = () => {
                         </button>
                         <div className='flex flex-col'>
                           <small className='text-[.6rem] block leading-none text-gray-400/50'> - {frase.author}</small>
-                          <span onClick={() => navigate('/maxim/' + key)}>"{frase.text}"</span>
+                          <span onClick={() => navigate(`/author/${author.split(' ').join('-').toLowerCase()}/maxim/${key}`)}>"{frase.text}"</span>
                         </div>
                       </li>)
                     ))
@@ -79,7 +87,7 @@ const Author = () => {
           }
         {currentQuotes.map((quote, index) => (
           <div key={`${index}-${quote.id}`} className='py-5 quote [&:last-of-type_hr]:opacity-0'>
-            <Link to={`${shareUrl}/maxim/${quote.id}`}>
+            <Link to={`${url}/author/${author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`}>
               <h1 className='dark:text-gray-300 text-gray-700 font-["Poppins"] font-[400] sm:text-2xl text-lg leading-none hover:dark:text-gray-100 hover:text-gray-500 duration-100'>"{quote.text}"</h1>
             </Link>
 
@@ -87,27 +95,27 @@ const Author = () => {
               <h2 className='dark:text-gray-300 text-gray-700 font-["Poppins"] font-[200]'>- {quote.author}</h2> 
               
               <div className='flex'>
-                <FacebookShareButton url={`${shareUrl}/maxim/${quote.id}`} quote={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
+                <FacebookShareButton url={`${url}/author/${quote.author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`} quote={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
                   <FacebookIcon size={25} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'} />
                 </FacebookShareButton>
 
-                <TwitterShareButton url={`${shareUrl}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
+                <TwitterShareButton url={`${url}/author/${quote.author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
                   <TwitterIcon size={25} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'} />
                 </TwitterShareButton>
 
-                <WhatsappShareButton url={`${shareUrl}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
+                <WhatsappShareButton url={`${url}/author/${quote.author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
                   <WhatsappIcon size={25} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'} />
                 </WhatsappShareButton>
 
-                <TelegramShareButton url={`${shareUrl}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
+                <TelegramShareButton url={`${url}/author/${quote.author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
                   <TelegramIcon size={25} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'} />
                 </TelegramShareButton>
 
-                <LinkedinShareButton url={`${shareUrl}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
+                <LinkedinShareButton url={`${url}/author/${quote.author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
                   <LinkedinIcon size={25} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'} />
                 </LinkedinShareButton>
 
-                <RedditShareButton url={`${shareUrl}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
+                <RedditShareButton url={`${url}/author/${quote.author.split(' ').join('-').toLowerCase()}/maxim/${quote.id}`} title={quote.text} className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
                   <RedditIcon size={25} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'} />
                 </RedditShareButton>          
 

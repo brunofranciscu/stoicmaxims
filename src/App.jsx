@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import TextoAudio from './components/TextoAudio.jsx';
 import AudioWaves from './components/AudioWaves.jsx';
 import { Analytics } from '@vercel/analytics/react';
+import { Helmet } from 'react-helmet-async';
 
 export default function App() {
   const [frases, setFrases] = useState([]);
@@ -87,7 +88,7 @@ export default function App() {
   const ShareIconComponent = share.icon;
   
     return (
-      <ShareButtonComponent url={`${url}/maxim/${fraseAtual.id}`} title={fraseAtual.text} key={index}
+      <ShareButtonComponent url={`${url}/author/${fraseAtual.author.split(' ').join('-').toLowerCase()}/maxim/${fraseAtual.id}`} title={fraseAtual.text} key={index}
                             className='opacity-45 hover:opacity-100 duration-100 dark:invert-0 invert'>
         <ShareIconComponent size={window.innerWidth < 640 ? 25 : 35} bgStyle={{ fill: 'transparent' }} iconFillColor={'white'}/>
       </ShareButtonComponent>
@@ -110,8 +111,16 @@ export default function App() {
   return (
         <div className='h-[100dvh] w-full relative grid place-content-center bg-gray-200 dark:bg-gray-800 px-5'>
         <Analytics/>
-              <button dangerouslySetInnerHTML={{__html:savedIcon}} title="ver salvos" style={{left:viewSaved ? window.innerWidth < 770 ? '90%' :'410px' : '20px'}}
-                      className='stroke-gray-500 hover:brightness-150 fill-gray-500 duration-75 absolute top-5 left-5 z-[999999]' 
+        <Helmet>
+          <title>Stoic Maxims</title>
+          <meta property="og:title" content="Stoic Maxims" />
+          <meta property="og:description" content="A myriad of stupenduos quotes from various authors." />
+          <meta property="og:image" content="./og.jpg" />
+          <meta property="og:url" content="https://stoicmaxim.vercel.app" />
+        </Helmet>
+        
+              <button dangerouslySetInnerHTML={{__html:savedIcon}} title="see saved" style={{left:viewSaved ? window.innerWidth < 770 ? '90%' :'410px' : '20px'}} key={'button'}
+                      className='stroke-gray-500 hover:brightness-150 fill-gray-500 duration-75 absolute top-5 left-5 z-[999999] text-gray-600 dark:text-gray-200' 
                       onClick={()=> setViewSaved(prevViewSaved => !prevViewSaved)}>
               </button>
 
@@ -130,7 +139,7 @@ export default function App() {
 
                                       <div className='flex flex-col'>
                                         <small className='text-[].6rem block leading-none text-gray-400/50'> - {frase.author}</small>
-                                        <span onClick={() => navigate('/maxim/'+key)}>"{frase.text}"</span>
+                                        <span onClick={() => navigate(`/author/${frase.author.split(' ').join('-').toLowerCase()}/maxim/${key}`)}>"{frase.text}"</span>
                                       </div>
                                     </li>
                             ))
@@ -147,7 +156,7 @@ export default function App() {
                 <div className='flex sm:justify-between justify-center max-w-[1000px] !w-full items-center flex-col sm:flex-row mt-5 gap-4 sm:gap-0'>
   
                   <h2 className='text-sm font-["Poppins"] sm:w-[200px] w-full text-center leading-none self-center text-gray-600 dark:text-gray-400 hover:text-gray-400 duration-100' title={`ver todas as maximas do ${fraseAtual.author}`}>
-                    <Link to={`${url}/author/${fraseAtual.author}`}>- {fraseAtual.author}</Link>
+                    <Link to={`${url}/author/${fraseAtual.author.split(' ').join('-')}`}>- {fraseAtual.author}</Link>
                   </h2>
   
                   <div className="links flex w-auto">
