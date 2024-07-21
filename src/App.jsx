@@ -141,7 +141,7 @@ export default function App() {
           
           {fraseAtual.text && (
               <div className='flex flex-col gap-1 justify-center items-center animate-[opacity_.8s_linear] bg-gray-200 dark:bg-gray-800'>
-                  <h1 className='font-["Poppins"] font-[500] sm:text-3xl text-2xl leading-10 min-w-[700px] max-w-[1300px] w-full text-center text-balance text-gray-600 dark:text-gray-200'>
+                  <h1 className='font-["Poppins"] font-[500] sm:text-3xl text-2xl leading-10 md:min-w-[700px] min-w-auto !w-full max-w-[1300px] text-center text-balance text-gray-600 dark:text-gray-200'>
                     "{fraseAtual.text}"
                   </h1>
                 <div className='flex sm:justify-between justify-center max-w-[1000px] !w-full items-center flex-col sm:flex-row mt-5 gap-4 sm:gap-0'>
